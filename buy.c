@@ -22,7 +22,9 @@ int buy(struct bot *b, int *action, int *n) {
     struct location *price = loc->price; //get the price of the goods
 
     double cash = b->cash - saving(b);
-    *n = cash/price;
+    double amount_buying = cash/price;
+    int amount_weight = amount_buying * (loc->weight);
+    int amount_volume = amount_buying * (loc->volume);
     *action = ACTION_BUY;
 
     
