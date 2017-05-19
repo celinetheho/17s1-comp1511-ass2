@@ -6,14 +6,6 @@
 
 #include "trader_bot.h"
 
-#define LOCATION_START            0
-#define LOCATION_SELLER           1
-#define LOCATION_BUYER            2
-#define LOCATION_PETROL_STATION   3
-#define LOCATION_DUMP             4
-#define LOCATION_OTHER            5
-
-
 int nearest_fuel(struct bot *b) {
 
     struct location *start = b->location;
