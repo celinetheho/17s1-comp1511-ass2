@@ -14,9 +14,9 @@ char *get_bot_name(void) {
     return "Fuel Bot";
 }
 
-void get_action(struct bot *b, int *action, int *n) {
+void fuel(struct bot *b, int *action, int *n) {
 
-    int max_move = b->maximum_move;
+//    int max_move = b->maximum_move;
     int fuel_distance = nearest_fuel(b);
     int fuel_needed = b->fuel_tank_capacity - (b->fuel);
 
@@ -24,11 +24,11 @@ void get_action(struct bot *b, int *action, int *n) {
         *action = ACTION_BUY;
         *n = fuel_needed;
     }
-    if(fuel_distance == 0 && fuel_needed == 0) {
+/*    if(fuel_distance == 0 && fuel_needed == 0) {
         *action = ACTION_MOVE;
         *n = max_move;
     }
-    if(fuel_distance != 0) {
+   if(fuel_distance != 0) {
         *action = ACTION_MOVE;
 
         if(fuel_distance > max_move) {
@@ -40,4 +40,4 @@ void get_action(struct bot *b, int *action, int *n) {
         else {
             *n = fuel_distance;
         }
-    }
+*/    }

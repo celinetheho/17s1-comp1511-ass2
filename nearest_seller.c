@@ -1,6 +1,6 @@
 //Celine Ho
 //15/05/2017
-//locates nearest buyer
+//locates nearest seller to ensure that after buying the product you can sel it
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,26 +8,40 @@
 #include "trader_bot.h"
 
 
-int nearest_buyer(struct bot *b) {
+char nearest_seller(struct bot *b) {
 
     struct location *start = b->location;
     struct location *forwards = start;
-    struct location *backwards = start;
+//    struct location *backwards = start;
 
-    int distance = 0;
+    char product = nearest_buyer(b);
 
-    while(forwards != start || distance == 0) {
-        if(forwards->type == LOCATION_BUYER) {
-            printf("%s: %s", forwards->name, forwards->commodity->name);
-            return distance;
+    //finds a seller for the product the buyer is buying
+    
+    int seller_distance = 0;
+    int seller = 0;
+    int price = 0;
+     
+    
+    while(distance == 0 || forwards != start) {
+        if(strcmp(forwards->commodity->name, product) == 0) {
+            printf("found seller selling %s", product);
+            price = forwards->price;
+            seller = 1;    
+            return seller_distance;
         }
-        if(backwards->type == LOCATION_BUYER) {
-            printf("%s: %s", backwards->name, backwards->commodity->name);
-            return -(distance);
+/*        if(strcmp(backwards->commodity->name, product) == 0) {
+            printf("found seller selling %s", product);
+            buyer = 1;
+            return product;
         }
-        forwards = forwards->next;
-        backwards = backwards->previous;
-        distance++;
+*/        forwards = forwards->next;
+//        backwards = backwards->previous;
+        seller_distance++;
     }
 
+    if(seller == 0) {
+        printf("No buyer selling that product: %s", product);
+        return seller;
+    }    
 }

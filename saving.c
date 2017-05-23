@@ -2,7 +2,7 @@
 //19/05/2017
 //saving money for fuel
 
-int saving(struct bot *b, int *action, int *n) {
+int saving(struct bot *b) {
 
 
     struct location *fuel = b->location;
@@ -23,7 +23,7 @@ int saving(struct bot *b, int *action, int *n) {
             fuel_distance++;
         }
     fuel_price = fuel->price;
-    saving = b->fuel_tank_capacity * (fuel_price);
+    saving = 2* (b->fuel_tank_capacity * (fuel_price));
 
     return saving;
 }

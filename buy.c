@@ -7,6 +7,7 @@ int buy(struct bot *b, int *action, int *n) {
 
     struct location *loc = b->location;
     int distance = nearest_seller(b);
+    char product = nearest_buyer(b);
  
     if(distance > 0) {//move the bot to the seller  
         while(distance != 0) {
