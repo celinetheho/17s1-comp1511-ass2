@@ -9,6 +9,8 @@ void get_action(struct bot *b, int *action, int *n) {
 
     struct location *forwards = b->location;
     struct bot *money = b->cash;
+    
+    int max_move = b->maximum_move;
 
 
     while(money > saving(b)) {
@@ -31,7 +33,19 @@ void get_action(struct bot *b, int *action, int *n) {
             buying = 0;
             selling = 0;
         }
-        if(b->fuel
+        
+        int fuel_needed = b->fuel_tank_capacity - (b->fuel);
+        if(b->type->LOCATION_PETROL_STATION && fuel_needed > 0) {
+            fuel_bot(b);
+        }
+        
+        action = ACTION_MOVE;
+        n = max_move;
+    }
+    
+}        
+
+
             
             
             
