@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "trader_bot.h"
+#include "header.h"
 
 
 char *get_bot_name(void) {

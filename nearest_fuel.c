@@ -5,12 +5,13 @@
 #include <stdlib.h>
 
 #include "trader_bot.h"
+#include "header.h"
 
 int nearest_fuel(struct bot *b) {
 
     struct location *start = b->location;
     struct location *forwards = start;
-//    struct location *backwards = start;
+    struct location *backwards = start;
 
     int distance = 0;
 
@@ -18,11 +19,12 @@ int nearest_fuel(struct bot *b) {
         if(forwards->type == LOCATION_PETROL_STATION) {
             return distance;
         }
-/*        if(backwards->type == LOCATION_PETROL_STATION) {
+        if(backwards->type == LOCATION_PETROL_STATION) {
             return -(distance);
         }
-*/        forwards = forwards->next;
-//        backwards = backwards->previous;
+        forwards = forwards->next;
+        backwards = backwards->previous;
         distance++;
     }
+    return 0;
 }
