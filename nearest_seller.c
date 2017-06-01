@@ -1,6 +1,6 @@
 //Celine Ho
 //15/05/2017
-//locates nearest seller to ensure that after buying the product you can sel it
+//locates nearest seller to ensure that after buying the product you can sell it
 
 #include <stdio.h>
 #include <stdlib.h>
