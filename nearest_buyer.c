@@ -1,6 +1,6 @@
 //Celine Ho
 //15/05/2017
-//locates nearest buyer 
+//locates nearest buyer that is buying what the nearest seller is selling
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,35 +9,46 @@
 #include "trader_bot.h"
 #include "header.h"
 
-char *nearest_buyer(struct bot *b) {
+int nearest_buyer(struct bot *b) {
 
     struct location *start = b->location;
+    int seller_distance = nearest_seller(b);
+    
+    //goes to nearest seller and gets its commodity name
+    while(seller_distance != 0) {
+        if(seller_distance < 0) {
+            start = start->previous;
+            seller_distance++;
+        }
+        if(seller_distance > 0) {
+            start = start->next;
+            seller_distance--;
+        }
+    }
+    
     struct location *forwards = start;
     struct location *backwards = start;
-
-    int buyer_distance = 0;
-    int buyer = 0;
-    char *product;
-
-    //locates nearest buyer and returns the product its buying
-    while(forwards != start || buyer_distance == 0) {
     
-        if(forwards->type == LOCATION_BUYER) {
-            printf("buyer %s: %s", forwards->name, forwards->commodity->name);
-            product = forwards->commodity->name;
-            buyer = 1;
-            return product;
+    char *product_seller = start->commodity->name;
+    int buyer_distance = 0;
+    
+    //sifts through the nearest buyers for a buyer that sells the commodity of the nearest seller
+    while(forwards != start || buyer_distance == 0) {
+        if(forwards->type == LOCATION_BUYER && forwards->quantity != 0) {
+            if(strcmp(forwards->commodity->name, product_seller) == 0 && forwards->commodity != NULL) {
+                return buyer_distance;
+            }
         }
-            if(backwards->type == LOCATION_BUYER) {
-                printf("buyer %s: %s", backwards->name, backwards->commodity->name);
-                product = backwards->commodity->name;
-                buyer = 1;
-            return product;
+        if(backwards->type == LOCATION_BUYER && backwards->quantity != 0) {
+            if(strcmp(backwards->commodity->name, product_seller) == 0 && backwards->commodity != NULL) {
+                return -(buyer_distance);
+            }
         }
-
         forwards = forwards->next;
         backwards = backwards->previous;
         buyer_distance++;
-    } 
+    }
+    
     return 0;
-}  
+}
+

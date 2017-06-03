@@ -1,6 +1,6 @@
 //Celine Ho
 //15/05/2017
-//locates nearest seller to ensure that after buying the product you can sell it
+//locates nearest seller
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,33 +16,21 @@ int nearest_seller(struct bot *b) {
     struct location *forwards = start;
     struct location *backwards = start;
 
-    char *product = nearest_buyer(b);
-
-    //finds a seller for the product the buyer is buying
-    
     int seller_distance = 0;
-    int seller = 0;
-    int price = 0;
-     
+
+    //locates nearest seller
+    while(forwards != start || seller_distance == 0) {
     
-    while(seller_distance == 0 || forwards != start) {
-        if(strcmp(forwards->commodity->name, product) == 0) {
-            printf("found seller selling %s, distance %d", product, seller_distance);
-            price = forwards->price;
-            seller = 1;    
+        if(forwards->type == LOCATION_SELLER && forwards->quantity != 0) {
             return seller_distance;
         }
-            if(strcmp(backwards->commodity->name, product) == 0) {
-                printf("found seller selling %s, distance %d", product, seller_distance);
-                price = backwards->price;
-                seller = 1;    
-            return seller_distance;
+            if(backwards->type == LOCATION_SELLER && backwards->quantity != 0) {
+            return -(seller_distance);
         }
 
         forwards = forwards->next;
         backwards = backwards->previous;
         seller_distance++;
-    }
-
+    } 
     return 0;
-}
+} 

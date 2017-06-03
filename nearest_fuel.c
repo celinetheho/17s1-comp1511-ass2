@@ -16,10 +16,10 @@ int nearest_fuel(struct bot *b) {
     int distance = 0;
 
     while(distance == 0 || forwards != start) { //to get distance at location since no NULL pointer in circular linked list
-        if(forwards->type == LOCATION_PETROL_STATION) {
+        if(forwards->type == LOCATION_PETROL_STATION && forwards->quantity != 0) {
             return distance;
         }
-        if(backwards->type == LOCATION_PETROL_STATION) {
+        if(backwards->type == LOCATION_PETROL_STATION && forwards->quantity != 0) {
             return -(distance);
         }
         forwards = forwards->next;

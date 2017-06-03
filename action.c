@@ -1,6 +1,6 @@
 //Celine Ho
 //get action function
-
+//20/05/2017
 
 
 #include <stdio.h>
@@ -11,7 +11,7 @@
 #include "trader_bot.h"
 
 char *get_bot_name(void) {
-    return "Fuel Bot";
+    return "a bot";
 }
 
 void get_action(struct bot *b, int *action, int *n) {
@@ -19,82 +19,46 @@ void get_action(struct bot *b, int *action, int *n) {
     //bot location
     struct location *bot_loc = b->location;
     
-    int money = b->cash;   
-    int max_move = b->maximum_move;
-    int quantity_buy = 0;
-    int price = b->location->price;
-
-
-    while(money > saving(b)) {
-        //locates nearest seller and buys commodity
-        if(nearest_seller(b) !=  0) {
-            //moves to nearest seller
-            *action = ACTION_MOVE;
-            *n = nearest_seller(b); 
-            
-            //buys commodity                             
-            price = b->location->price;
-            
-            //free items???
-            if(price == 0) {
-                *action = ACTION_BUY;
-                *n = 100; //
-            } else {
-                *action = ACTION_BUY;  
-                quantity_buying = (money - saving(b))/price;
-                *n = quantity_buying;
-            }   
-        } else {
-            *action = ACTION_BUY;
-            price = b->location->price;
-            quantity_buying = (money - saving(b))/price;
-        }
-    }
-                        
-          
-    //what i want to sell          
-    char *product_selling = nearest_buyer(b);
-    //product that the seller is selling
-    char *product_buyer = forwards->commodity->name;
-          
-    while(strcmp(product_selling, product_buyer) != 0) {
-        bot_loc = bot_loc->next;
-    }
-        *action = ACTION_BUY;
-        int buying = quantity_buying;
-        *n = buying;
-            
-        //reset 
-        buying = 0;
-        quantity_buying = 0;
-
-    //sellling commodity at a buyer
-    char comm = b->cargo->commodity;
-
-    if(b->location == LOCATION_SELLER) {
-        while(comm->name != b->location->commodity->name) {
-            comm = comm->next;           
-        }
-        if(comm->name == b->location->commodity->name) {
-            return comm->name;         
-        }
+    //if the bot has no cargo it will go to the nearest seller
+    if(b->cargo == NULL && bot_loc->type != LOCATION_SELLER) {
+        *action = ACTION_MOVE;
+        *n = nearest_seller(b);
     } 
+    
+    //if its a seller it will buy commodity
+    if(bot_loc->type == LOCATION_SELLER && b->cargo == NULL) {
+        *action = ACTION_BUY; 
+        *n = (b->cash - saving(b))/(b->location->price);
+    }
+    
+    if(bot_loc->type == LOCATION_SELLER && b->cargo != NULL) {
+        *action = ACTION_MOVE;
+        *n = nearest_buyer(b);
+    }          
+    struct cargo *cargo = b->cargo;
 
-          
+    //if its a buyer it will sell commodity
+    if(b->location->type == LOCATION_BUYER && b->cargo != NULL) {
+///        while(cargo->commodity->name != b->location->commodity->name) {
+//            cargo = cargo->next;           
+//        }
+        *action = ACTION_SELL;
+        *n = cargo->quantity; 
+    }
+       
     //buying fuel    
     int fuel_needed = b->fuel_tank_capacity - (b->fuel);
-    int fuel_limit = b->fuel/3;
+    int fuel_limit = b->fuel_tank_capacity/2;
+    
         
-    if((b->location->type == LOCATION_PETROL_STATION && fuel_needed > 0) || fuel_needed > fuel_limit) {
+    if(fuel_needed >= fuel_limit && bot_loc->type != LOCATION_PETROL_STATION) {
+        *action = ACTION_MOVE;
+        *n = nearest_fuel(b);
+    }
+    if(bot_loc->type == LOCATION_PETROL_STATION && fuel_needed != 0) {
         *action = ACTION_BUY;
         *n = fuel_needed;
-    }
-        
-    *action = ACTION_MOVE;
-    *n = max_move;
+    }  
     
 }
-         
-
-
-
+  
