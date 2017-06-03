@@ -9,27 +9,15 @@
 #include "trader_bot.h"
 #include "header.h"
 
-int nearest_buyer(struct bot *b) {
+int nearest_buyer1(struct bot *b) {
 
+if(b->cargo != NULL) {
     struct location *start = b->location;
-    int seller_distance = nearest_seller(b);
-    
-    //goes to nearest seller and gets its commodity name
-    while(seller_distance != 0) {
-        if(seller_distance < 0) {
-            start = start->previous;
-            seller_distance++;
-        }
-        if(seller_distance > 0) {
-            start = start->next;
-            seller_distance--;
-        }
-    }
     
     struct location *forwards = start;
     struct location *backwards = start;
     
-    char *product_seller = start->commodity->name;
+    char *product_seller = b->cargo->commodity->name;
     int buyer_distance = 0;
     
     //sifts through the nearest buyers for a buyer that sells the commodity of the nearest seller
@@ -48,7 +36,6 @@ int nearest_buyer(struct bot *b) {
         backwards = backwards->previous;
         buyer_distance++;
     }
-    
+}
     return 0;
 }
-

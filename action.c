@@ -11,7 +11,7 @@
 #include "trader_bot.h"
 
 char *get_bot_name(void) {
-    return "a bot";
+    return "profit mong";
 }
 
 void get_action(struct bot *b, int *action, int *n) {
@@ -33,17 +33,38 @@ void get_action(struct bot *b, int *action, int *n) {
     
     if(bot_loc->type == LOCATION_SELLER && b->cargo != NULL) {
         *action = ACTION_MOVE;
-        *n = nearest_buyer(b);
+        *n = nearest_buyer1(b);
     }          
     struct cargo *cargo = b->cargo;
 
     //if its a buyer it will sell commodity
-    if(b->location->type == LOCATION_BUYER && b->cargo != NULL) {
-///        while(cargo->commodity->name != b->location->commodity->name) {
-//            cargo = cargo->next;           
-//        }
-        *action = ACTION_SELL;
-        *n = cargo->quantity; 
+    if(b->location->type == LOCATION_BUYER && b->cargo != NULL && bot_loc->quantity != 0) {
+        if(strcmp(bot_loc->commodity->name, b->cargo->commodity->name) == 0) {
+            *action = ACTION_SELL;
+            *n = cargo->quantity;
+        }
+        else {
+            *action = ACTION_MOVE;
+            *n = nearest_buyer1(b);
+        }
+           
+    }
+    if(b->location->type == LOCATION_BUYER && b->cargo != NULL && bot_loc->quantity == 0) {
+        *action = ACTION_MOVE;
+        *n = nearest_buyer(b); 
+    }    
+    
+    //if the bot goes to a trivial location
+    if(bot_loc->type == LOCATION_START || bot_loc->type == LOCATION_DUMP|| bot_loc->type == LOCATION_OTHER) {
+        if(b->cargo == NULL) {
+            *action = ACTION_MOVE;
+            *n = nearest_seller(b);
+        }
+        else {
+            *action = ACTION_MOVE;
+            *n = nearest_buyer1(b);
+        }
+           
     }
        
     //buying fuel    
@@ -58,7 +79,19 @@ void get_action(struct bot *b, int *action, int *n) {
     if(bot_loc->type == LOCATION_PETROL_STATION && fuel_needed != 0) {
         *action = ACTION_BUY;
         *n = fuel_needed;
-    }  
+    }
+    
+    //after buying fuel
+    if(bot_loc->type == LOCATION_PETROL_STATION && fuel_needed < fuel_limit && b->cargo == NULL) {
+        *action = ACTION_MOVE;
+        *n = nearest_seller(b);
+    }
+    if(bot_loc->type == LOCATION_PETROL_STATION && fuel_needed < fuel_limit && b->cargo != NULL) {
+        *action = ACTION_MOVE;
+        *n = nearest_buyer1(b);
+    }
+    
+      
     
 }
   
