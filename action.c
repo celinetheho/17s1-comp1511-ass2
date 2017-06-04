@@ -33,7 +33,7 @@ void get_action(struct bot *b, int *action, int *n) {
     
     if(bot_loc->type == LOCATION_SELLER && b->cargo != NULL) {
         *action = ACTION_MOVE;
-        *n = nearest_buyer1(b);
+        *n = nearest_buyer(b);
     }          
     struct cargo *cargo = b->cargo;
 
@@ -45,7 +45,7 @@ void get_action(struct bot *b, int *action, int *n) {
         }
         else {
             *action = ACTION_MOVE;
-            *n = nearest_buyer1(b);
+            *n = nearest_buyer(b);
         }
            
     }
@@ -55,18 +55,18 @@ void get_action(struct bot *b, int *action, int *n) {
     }    
     
     //if the bot goes to a trivial location
-    if(bot_loc->type == LOCATION_START || bot_loc->type == LOCATION_DUMP|| bot_loc->type == LOCATION_OTHER) {
+    if(bot_loc->type == LOCATION_START || bot_loc->type == LOCATION_DUMP || bot_loc->type == LOCATION_OTHER) {
         if(b->cargo == NULL) {
             *action = ACTION_MOVE;
             *n = nearest_seller(b);
         }
         else {
             *action = ACTION_MOVE;
-            *n = nearest_buyer1(b);
+            *n = nearest_buyer(b);
         }
            
     }
-       
+         
     //buying fuel    
     int fuel_needed = b->fuel_tank_capacity - (b->fuel);
     int fuel_limit = b->fuel_tank_capacity/2;
@@ -88,7 +88,7 @@ void get_action(struct bot *b, int *action, int *n) {
     }
     if(bot_loc->type == LOCATION_PETROL_STATION && fuel_needed < fuel_limit && b->cargo != NULL) {
         *action = ACTION_MOVE;
-        *n = nearest_buyer1(b);
+        *n = nearest_buyer(b);
     }
     
       

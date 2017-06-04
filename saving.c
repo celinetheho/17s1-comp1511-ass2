@@ -24,7 +24,8 @@ int saving(struct bot *b) {
             fuel_distance++;
         }
     }
-        
+    
+    //calculate saving    
     int fuel_price = loc->price;
     saving = 1.5* (b->fuel_tank_capacity * (fuel_price));
 

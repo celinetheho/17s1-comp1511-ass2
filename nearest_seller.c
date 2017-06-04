@@ -1,6 +1,6 @@
 //Celine Ho
 //15/05/2017
-//locates nearest seller
+//locates nearest seller and returns its distance
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,10 +21,10 @@ int nearest_seller(struct bot *b) {
     //locates nearest seller
     while(forwards != start || seller_distance == 0) {
     
-        if(forwards->type == LOCATION_SELLER && forwards->quantity != 0) {
+        if(forwards->type == LOCATION_SELLER && forwards->quantity > 0) {
             return seller_distance;
         }
-            if(backwards->type == LOCATION_SELLER && backwards->quantity != 0) {
+            if(backwards->type == LOCATION_SELLER && backwards->quantity > 0) {
             return -(seller_distance);
         }
 

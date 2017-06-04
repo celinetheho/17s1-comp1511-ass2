@@ -1,5 +1,6 @@
 //Celine Ho
 //13/05/2017
+//returns the distance of the nearest fuel station
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,10 +17,10 @@ int nearest_fuel(struct bot *b) {
     int distance = 0;
 
     while(distance == 0 || forwards != start) { //to get distance at location since no NULL pointer in circular linked list
-        if(forwards->type == LOCATION_PETROL_STATION && (b->location->quantity != 0)) {
+        if(forwards->type == LOCATION_PETROL_STATION && (b->location->quantity > 0)) {
             return distance;
         }
-        if(backwards->type == LOCATION_PETROL_STATION && (b->location->quantity != 0)) {
+        if(backwards->type == LOCATION_PETROL_STATION && (b->location->quantity > 0)) {
             return -(distance);
         }
         forwards = forwards->next;
